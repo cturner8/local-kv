@@ -1,37 +1,37 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/go
 {
-	"name": "dev",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.21-bullseye",
+  "name": "dev",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "image": "mcr.microsoft.com/devcontainers/go:1-1.21-bullseye",
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
 
-	// Configure tool-specific properties.
-	// "customizations": {},
+  // Configure tool-specific properties.
+  // "customizations": {},
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "vscode",
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  "remoteUser": "vscode",
 
-	"mounts": [
-		"source=${localWorkspaceFolderBasename}-mod,target=/go/pkg/mod,type=volume"
-	  ],
-	
-	  // Uncomment the next line to run commands after the container is created.
-	  "postCreateCommand": "sudo chmod -R a+rwX /go/pkg && go mod tidy",
-	
-	  "customizations": {
-		"vscode": {
-		  "extensions": [
-			// "ms-azuretools.vscode-docker",
-			// "Vue.volar",
-			// "Vue.vscode-typescript-vue-plugin",
-			// "esbenp.prettier-vscode"
-		  ]
-		}
-	  }
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-mod,target=/go/pkg/mod,type=volume"
+  ],
+
+  // Uncomment the next line to run commands after the container is created.
+  "postCreateCommand": "sudo chmod -R a+rwX /go/pkg && go mod tidy && go install github.com/bokwoon95/wgo@latest",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // "ms-azuretools.vscode-docker",
+        // "Vue.volar",
+        // "Vue.vscode-typescript-vue-plugin",
+        // "esbenp.prettier-vscode"
+      ]
+    }
+  }
 }
