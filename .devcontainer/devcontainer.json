@@ -22,11 +22,12 @@
   ],
 
   // Uncomment the next line to run commands after the container is created.
-  "postCreateCommand": "sudo chmod -R a+rwX /go/pkg && go mod tidy && go install github.com/bokwoon95/wgo@latest",
+  "postCreateCommand": "sh ./.devcontainer/postCreateCommand.sh",
 
   "customizations": {
     "vscode": {
       "extensions": [
+        "Codeium.codeium"
         // "ms-azuretools.vscode-docker",
         // "Vue.volar",
         // "Vue.vscode-typescript-vue-plugin",
