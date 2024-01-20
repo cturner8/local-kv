@@ -2,8 +2,12 @@
   "editor.formatOnSave": true,
   // "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.defaultFormatter": null,
+  "gopls": {
+    "ui.semanticTokens": true,
+    "formatting.gofumpt": true
+  },
   "[go]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
   "[dockercompose]": {
     "editor.insertSpaces": true,

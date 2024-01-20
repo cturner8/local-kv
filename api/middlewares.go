@@ -18,3 +18,14 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func ErrorMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Print("Caught runtime error: ", err)
+			}
+		}()
+		next.ServeHTTP(w, r)
+	})
+}

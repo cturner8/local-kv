@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model KeyMetadata {
+  id                          String                 @id @default(uuid())
+  keyMaterial                 KeyMaterial?
+  createdDate                 DateTime               @default(now())
+  updatedDate                 DateTime               @default(now()) @updatedAt
+  arn                         String?
+  awsAccountId                String?
+  cloudHsmClusterId           String?
+  customerMasterKeySpec       String?
+  customKeyStoreId            String?
+  deletionDate                Int?
+  description                 String?
+  enabled                     Boolean
+  encryptionAlgorithms        KeyMetadataAlgorithm[] @relation("KeyMetadataEncryptionAlgorithm")
+  expirationModel             String?
+  keyManager                  String
+  keySpec                     String?
+  keyState                    String?
+  keyUsage                    String?
+  macAlgorithms               KeyMetadataAlgorithm[] @relation("KeyMetadataMacAlgorithm")
+  multiRegion                 Boolean
+  origin                      String?
+  pendingDeletionWindowInDays Int?
+  signingAlgorithms           KeyMetadataAlgorithm[] @relation("KeyMetadataSigningAlgorithm")
+  validTo                     Int?
+}
+
+model KeyMetadataAlgorithm {
+  id                             String      @id @default(uuid())
+  keyMetadataId                  String
+  algorithm                      String
+  encryptionAlgorithmKeyMetadata KeyMetadata @relation(name: "KeyMetadataEncryptionAlgorithm", fields: [keyMetadataId], references: [id])
+  macAlgorithmKeyMetadata        KeyMetadata @relation(name: "KeyMetadataMacAlgorithm", fields: [keyMetadataId], references: [id])
+  signingAlgorithmKeyMetadata    KeyMetadata @relation(name: "KeyMetadataSigningAlgorithm", fields: [keyMetadataId], references: [id])
+}
+
+model KeyMaterial {
+  id                     String      @id @default(uuid())
+  keyId                  String      @unique
+  keyMetadata            KeyMetadata @relation(fields: [keyId], references: [id])
+  protectedDataKey       String
+  protectedKeyMaterial   String
+  unprotectedKeyMaterial String
+  createdDate            DateTime    @default(now())
+  updatedDate            DateTime    @default(now()) @updatedAt
+}

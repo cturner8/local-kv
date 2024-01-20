@@ -1,0 +1,12 @@
+{
+  "name": "db",
+  "packageManager": "yarn@4.0.2",
+  "devDependencies": {
+    "prisma": "5.8.1"
+  },
+  "scripts": {
+    "prisma": "prisma",
+    "migrate:dev": "prisma migrate dev --skip-generate",
+    "studio": "prisma studio"
+  }
+}
