@@ -1,19 +1,37 @@
 package main
 
 import (
-	"cturner8/local-kv/operations"
+	"database/sql"
 	"log"
 	"net/http"
 
+	"cturner8/local-kv/operations"
+
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	log.Println("Initializing API")
+	log.Println("Initializing API...")
 
 	router := mux.NewRouter()
 	router.Use(HeadersMiddleware)
 	router.Use(LoggingMiddleware)
+
+	// Initialise database
+	log.Println("Connecting to database...")
+
+	db, err := sql.Open("sqlite3", "./vault.db")
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Connected to database")
 
 	// API operations
 	router.HandleFunc("/", operations.ListKeysHandler).Methods("POST").Headers("X-Amz-Target", "TrentService.ListKeys")

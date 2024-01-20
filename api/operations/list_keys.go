@@ -1,9 +1,10 @@
 package operations
 
 import (
-	"cturner8/local-kv/schemas"
 	"encoding/json"
 	"net/http"
+
+	"cturner8/local-kv/schemas"
 )
 
 func ListKeysHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,7 +16,7 @@ func ListKeysHandler(w http.ResponseWriter, r *http.Request) {
 	jsonData, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		panic(err)
 	}
 
 	w.Write(jsonData)

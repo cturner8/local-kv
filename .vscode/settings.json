@@ -14,5 +14,15 @@
     "editor.quickSuggestions": {
       "strings": true
     }
+  },
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    // "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
   }
 }
