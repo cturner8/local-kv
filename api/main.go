@@ -11,13 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func main() {
-	log.Println("Initializing API...")
-
-	router := mux.NewRouter()
-	router.Use(HeadersMiddleware)
-	router.Use(LoggingMiddleware)
-
+func connectDatabase() *sql.DB {
 	// Initialise database
 	log.Println("Connecting to database...")
 
@@ -33,12 +27,28 @@ func main() {
 	}
 	log.Println("Connected to database")
 
+	return db
+}
+
+func setupRouter() *mux.Router {
+	router := mux.NewRouter()
+	router.Use(HeadersMiddleware)
+	router.Use(LoggingMiddleware)
+
 	// API operations
 	router.HandleFunc("/", operations.ListKeysHandler).Methods("POST").Headers("X-Amz-Target", "TrentService.ListKeys")
-
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("API is running..."))
 	})
+
+	return router
+}
+
+func main() {
+	log.Println("Initializing API...")
+
+	connectDatabase()
+	router := setupRouter()
 
 	log.Println("API is running...")
 
