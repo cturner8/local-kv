@@ -2,11 +2,21 @@
   "name": "db",
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
-    "prisma": "5.8.1"
+    "@tsconfig/node-lts": "^20.1.1",
+    "@tsconfig/recommended": "^1.0.3",
+    "@tsconfig/strictest": "^2.0.2",
+    "@types/node": "^20.11.5",
+    "prisma": "5.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "prisma": "prisma",
-    "migrate:dev": "prisma migrate dev --skip-generate",
-    "studio": "prisma studio"
+    "migrate:dev": "prisma migrate dev",
+    "studio": "prisma studio",
+    "playground": "ts-node playground.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.1"
   }
 }

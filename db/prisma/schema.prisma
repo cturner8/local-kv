@@ -13,8 +13,10 @@ datasource db {
 model KeyMetadata {
   id                          String                 @id @default(uuid())
   keyMaterial                 KeyMaterial?
-  createdDate                 DateTime               @default(now())
-  updatedDate                 DateTime               @default(now()) @updatedAt
+  createdDate                 String             
+  updatedDate                 String               
+  // createdDate                 DateTime               @default(now())
+  // updatedDate                 DateTime               @default(now()) @updatedAt
   arn                         String?
   awsAccountId                String?
   cloudHsmClusterId           String?
@@ -52,7 +54,9 @@ model KeyMaterial {
   keyMetadata            KeyMetadata @relation(fields: [keyId], references: [id])
   protectedDataKey       String
   protectedKeyMaterial   String
-  unprotectedKeyMaterial String
-  createdDate            DateTime    @default(now())
-  updatedDate            DateTime    @default(now()) @updatedAt
+  unprotectedKeyMaterial String?
+  createdDate            String   
+  updatedDate            String   
+  // createdDate            DateTime    @default(now())
+  // updatedDate            DateTime    @default(now()) @updatedAt
 }
