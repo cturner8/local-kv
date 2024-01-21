@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"cturner8/local-kv/crypto"
+	"cturner8/local-kv/crypto/aes"
 )
 
 var (
@@ -63,7 +63,7 @@ func ConfigureEnvironment() {
 			}
 			defer keyFile.Close()
 
-			masterKey := crypto.GenerateDataKey()
+			masterKey := aes.GenerateDataKey()
 			if _, err := keyFile.WriteString(base64.StdEncoding.EncodeToString(masterKey)); err != nil {
 				panic(err)
 			}
