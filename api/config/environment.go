@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"cturner8/local-kv/crypto"
 	"cturner8/local-kv/crypto/aes"
 )
 
@@ -14,10 +15,10 @@ var (
 	// data config
 	LOCAL_KV_DATA_DIR = getEnvWithDefaultDirectory("LOCAL_KV_DATA_DIR", "/.local-kv/data")
 	// secrets config
-	LOCAL_KV_SECRETS_ENGINE  = getEnvWithDefault("LOCAL_KV_SECRETS_ENGINE", "file")
-	LOCAL_KV_SECRETS_DIR     = getEnvWithDefaultDirectory("LOCAL_KV_SECRETS_DIR", "/.local-kv/secrets")
-	LOCAL_KV_MASTER_KEY_FILE = LOCAL_KV_SECRETS_DIR + "/master.key"
-	LOCAL_KV_TEMP_SALT       = os.Getenv("LOCAL_KV_TEMP_SALT")
+	LOCAL_KV_SECRETS_ENGINE       = getEnvWithDefault("LOCAL_KV_SECRETS_ENGINE", "file")
+	LOCAL_KV_SECRETS_DIR          = getEnvWithDefaultDirectory("LOCAL_KV_SECRETS_DIR", "/.local-kv/secrets")
+	LOCAL_KV_MASTER_KEY_FILE      = LOCAL_KV_SECRETS_DIR + "/master.key"
+	LOCAL_KV_MASTER_KEY_SALT_FILE = LOCAL_KV_SECRETS_DIR + "/master.salt"
 )
 
 func getEnvWithDefault(key, defaultValue string) string {
@@ -69,6 +70,24 @@ func ConfigureEnvironment() {
 			}
 
 			log.Print("Master key generated")
+		}
+
+		_, err = os.Stat(LOCAL_KV_MASTER_KEY_SALT_FILE)
+		if err != nil {
+			log.Print("Generating new master key salt")
+
+			saltFile, err := os.Create(LOCAL_KV_MASTER_KEY_SALT_FILE)
+			if err != nil {
+				panic(err)
+			}
+			defer saltFile.Close()
+
+			salt := crypto.GenerateSalt()
+			if _, err := saltFile.WriteString(base64.StdEncoding.EncodeToString(salt)); err != nil {
+				panic(err)
+			}
+
+			log.Print("Master key salt generated")
 		}
 	}
 

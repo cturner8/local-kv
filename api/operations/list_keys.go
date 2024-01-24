@@ -12,6 +12,8 @@ type ListKeysController struct {
 	db *sql.DB
 }
 
+var LIST_KEYS_HEADER = "TrentService.ListKeys"
+
 func NewListKeysController(db *sql.DB) *ListKeysController {
 	return &ListKeysController{db: db}
 }

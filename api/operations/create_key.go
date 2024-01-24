@@ -26,6 +26,8 @@ type CreateKeyController struct {
 	masterKey []byte
 }
 
+var CREATE_KEY_HEADER = "TrentService.CreateKey"
+
 func NewCreateKeyController(db *sql.DB, masterKey []byte) *CreateKeyController {
 	return &CreateKeyController{db: db, masterKey: masterKey}
 }
@@ -165,6 +167,8 @@ func (c *CreateKeyController) CreateKeyHandler(w http.ResponseWriter, r *http.Re
 		panic(err)
 	}
 
+	log.Printf("Created key [%s]", id)
+
 	// generate the key material
 	dataKey := aes.GenerateDataKey()
 	additionalData := []byte(id)
@@ -227,6 +231,8 @@ func (c *CreateKeyController) CreateKeyHandler(w http.ResponseWriter, r *http.Re
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		panic(err)
 	}
+
+	log.Printf("Created [%s] key material for [%s]", body.KeySpec, id)
 
 	response := schemas.CreateKeyResponse{
 		KeyMetadata: keyMetadata,

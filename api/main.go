@@ -14,6 +14,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var ROUTER_HEADER_NAME = "X-Amz-Target"
+
 func connectDatabase() *sql.DB {
 	// Initialise database
 	log.Println("Connecting to database...")
@@ -43,8 +45,8 @@ func setupRouter(db *sql.DB, masterKey []byte) *mux.Router {
 	createKeysController := operations.NewCreateKeyController(db, masterKey)
 
 	// API operations
-	router.HandleFunc("/", listKeysController.ListKeysHandler).Methods("POST").Headers("X-Amz-Target", "TrentService.ListKeys")
-	router.HandleFunc("/", createKeysController.CreateKeyHandler).Methods("POST").Headers("X-Amz-Target", "TrentService.CreateKey")
+	router.HandleFunc("/", listKeysController.ListKeysHandler).Methods("POST").Headers(ROUTER_HEADER_NAME, operations.LIST_KEYS_HEADER)
+	router.HandleFunc("/", createKeysController.CreateKeyHandler).Methods("POST").Headers(ROUTER_HEADER_NAME, operations.CREATE_KEY_HEADER)
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("API is running..."))
@@ -54,13 +56,11 @@ func setupRouter(db *sql.DB, masterKey []byte) *mux.Router {
 }
 
 func getMasterKey() []byte {
-	// get the raw master key from the secret file
+	// get the raw master key and salt from the secret file
 	rawMasterKey := utils.ReadSecretFile(config.LOCAL_KV_MASTER_KEY_FILE)
+	salt := utils.ReadSecretFile(config.LOCAL_KV_MASTER_KEY_SALT_FILE)
 	// derive the master key
-	if config.LOCAL_KV_TEMP_SALT == "" {
-		panic("Error, key salt not found")
-	}
-	masterKey := crypto.DeriveKey(rawMasterKey, []byte(config.LOCAL_KV_TEMP_SALT)) // TODO: generate a secure salt
+	masterKey := crypto.DeriveKey(rawMasterKey, salt)
 	return masterKey
 }
 
