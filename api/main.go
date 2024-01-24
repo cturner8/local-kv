@@ -43,10 +43,12 @@ func setupRouter(db *sql.DB, masterKey []byte) *mux.Router {
 	// Create controllers
 	listKeysController := operations.NewListKeysController(db)
 	createKeysController := operations.NewCreateKeyController(db, masterKey)
+	encryptController := operations.NewEncryptController(db, masterKey)
 
 	// API operations
 	router.HandleFunc("/", listKeysController.ListKeysHandler).Methods("POST").Headers(ROUTER_HEADER_NAME, operations.LIST_KEYS_HEADER)
 	router.HandleFunc("/", createKeysController.CreateKeyHandler).Methods("POST").Headers(ROUTER_HEADER_NAME, operations.CREATE_KEY_HEADER)
+	router.HandleFunc("/", encryptController.EncryptHandler).Methods("POST").Headers(ROUTER_HEADER_NAME, operations.ENCRYPT_HEADER)
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("API is running..."))

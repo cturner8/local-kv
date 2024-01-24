@@ -32,7 +32,7 @@ func NewCreateKeyController(db *sql.DB, masterKey []byte) *CreateKeyController {
 	return &CreateKeyController{db: db, masterKey: masterKey}
 }
 
-func validateRequest(w http.ResponseWriter, body schemas.CreateKeyRequest) {
+func validateCreateKeyRequest(w http.ResponseWriter, body schemas.CreateKeyRequest) {
 	log.Print("Validating request...")
 
 	log.Print("Validating user provided values")
@@ -105,7 +105,7 @@ func (c *CreateKeyController) CreateKeyHandler(w http.ResponseWriter, r *http.Re
 		panic(err)
 	}
 
-	validateRequest(w, body)
+	validateCreateKeyRequest(w, body)
 
 	// create the key metadata
 	id := uuid.NewString()

@@ -17,3 +17,15 @@ func EncodePublicKey(publicKey *rsa.PublicKey) []byte {
 	pemBlock := pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: publicKeyBytes})
 	return pemBlock
 }
+
+func DecodePrivateKey(pemBlock []byte) *rsa.PrivateKey {
+	privateKeyBlock, _ := pem.Decode(pemBlock)
+	privateKey, _ := x509.ParsePKCS1PrivateKey(privateKeyBlock.Bytes)
+	return privateKey
+}
+
+func DecodePublicKey(pemBlock []byte) *rsa.PublicKey {
+	publicKeyBlock, _ := pem.Decode(pemBlock)
+	publicKey, _ := x509.ParsePKCS1PublicKey(publicKeyBlock.Bytes)
+	return publicKey
+}

@@ -2,7 +2,7 @@ package schemas
 
 type EncryptRequest struct {
 	KeyId               string             `json:"KeyId"`
-	Plaintext           []byte             `json:"Plaintext"`
+	Plaintext           string             `json:"Plaintext"`
 	DryRun              *bool              `json:"DryRun"`
 	EncryptionAlgorithm *string            `json:"EncryptionAlgorithm"`
 	EncryptionContext   *map[string]string `json:"EncryptionContext"`
@@ -10,7 +10,7 @@ type EncryptRequest struct {
 }
 
 type EncryptResponse struct {
-	CiphertextBlob      []byte `json:"CiphertextBlob"`
+	CiphertextBlob      string `json:"CiphertextBlob"`
 	EncryptionAlgorithm string `json:"EncryptionAlgorithm"`
 	KeyId               string `json:"KeyId"`
 }
