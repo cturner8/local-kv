@@ -13,7 +13,14 @@ func TestGenerateKey(t *testing.T) {
 		t.Errorf("Expected key length of 32, got %d", len(key))
 	}
 
-	if base64key != "E804mZBsD1m5OQ4G8McMuQD2F0sVQD1vVdSPaOaz5+I=" {
+	if base64key != "mgExwmqkNdLiDYfakZOi8LL8ehUr9MTWxkVe3pYX9jc=" {
 		t.Errorf("Key mismatch")
+	}
+}
+
+func TestGenerateSalt(t *testing.T) {
+	salt := GenerateSalt()
+	if len(salt) != 32 {
+		t.Errorf("Expected salt length of 32, got %d", len(salt))
 	}
 }

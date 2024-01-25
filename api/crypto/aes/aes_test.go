@@ -1,6 +1,9 @@
 package aes
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func TestGenerateDataKey(t *testing.T) {
 	key := GenerateDataKey()
@@ -13,6 +16,14 @@ func TestGenerateNonce(t *testing.T) {
 	nonce := GenerateNonce()
 	if len(nonce) != 12 {
 		t.Errorf("Expected nonce length of 12, got %d", len(nonce))
+	}
+}
+
+func TestGenerateUniqueNonce(t *testing.T) {
+	nonce1 := GenerateNonce()
+	nonce2 := GenerateNonce()
+	if bytes.Equal(nonce1, nonce2) {
+		t.Errorf("Expected nonces to be unique")
 	}
 }
 
@@ -54,4 +65,44 @@ func TestDecryptWithAad(t *testing.T) {
 	if string(decryptedPlaintext) != plaintext {
 		t.Errorf("Expected decrypted plaintext to be %s, got %s", plaintext, string(decryptedPlaintext))
 	}
+}
+
+func TestDecryptWithWrongKey(t *testing.T) {
+	defer func() {
+		err := recover()
+
+		if err == nil {
+			t.Error("Expected decrypt process to error")
+		}
+	}()
+
+	key := GenerateDataKey()
+
+	plaintext := "lorem ipsum dolor sit amet"
+	ciphertext := Encrypt(key, []byte(plaintext), nil)
+
+	key = GenerateDataKey()
+	Decrypt(key, ciphertext, nil)
+
+	t.Error("Expected failure")
+}
+
+func TestDecryptWithWrongAad(t *testing.T) {
+	defer func() {
+		err := recover()
+
+		if err == nil {
+			t.Error("Expected decrypt process to error")
+		}
+	}()
+
+	key := GenerateDataKey()
+
+	plaintext := "lorem ipsum dolor sit amet"
+	additionalData := []byte("john doe")
+	ciphertext := Encrypt(key, []byte(plaintext), &additionalData)
+
+	Decrypt(key, ciphertext, nil)
+
+	t.Error("Expected failure")
 }
